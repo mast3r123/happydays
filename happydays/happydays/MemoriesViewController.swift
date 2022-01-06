@@ -67,10 +67,31 @@ class MemoriesViewController: UICollectionViewController {
                 try jpegData.write(to: imagePath, options:
                                     [.atomicWrite])
             }
-            // create thumbnail here
+            // create thumbnail
+            if let thumb = resize(image: image, to: 200) {
+                let imagePath = getDocumentsDirectory().appendingPathComponent(thumbName)
+                if let jpegData = thumb.jpegData(compressionQuality: 0.8) {
+                    try jpegData.write(to: imagePath, options: [.atomicWrite])
+                }
+            }
         } catch {
             print("Failed to save to disk.")
         }
+    }
+    
+    func resize(image: UIImage, to width: CGFloat) -> UIImage? {
+        //calculate scale for resize
+        let scale = width / image.size.width
+        
+        let height = image.size.height * scale
+        
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0)
+        image.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        
+        UIGraphicsEndImageContext()
+        return newImage
     }
     
     func getDocumentsDirectory() -> URL {
