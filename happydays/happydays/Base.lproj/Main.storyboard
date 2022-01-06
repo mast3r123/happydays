@@ -35,6 +35,9 @@ asked to grant those permissions, but you can change your mind later in Settings
                                         <buttonConfiguration key="configuration" style="plain" title="Continue">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="25"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="requestPermissions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iXi-YB-1IS"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -48,6 +51,9 @@ asked to grant those permissions, but you can change your mind later in Settings
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Welcome" id="bxW-Uw-sJS"/>
+                    <connections>
+                        <outlet property="helpLabel" destination="1oh-jX-2hv" id="qUA-sl-FDm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -56,7 +62,7 @@ asked to grant those permissions, but you can change your mind later in Settings
         <!--Happy Days-->
         <scene sceneID="6lk-fh-057">
             <objects>
-                <collectionViewController id="zut-xY-lPl" sceneMemberID="viewController">
+                <collectionViewController id="zut-xY-lPl" customClass="MemoriesViewController" customModule="happydays" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="eKQ-xK-wnu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -68,7 +74,7 @@ asked to grant those permissions, but you can change your mind later in Settings
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="LYX-lR-LHR">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Memory" id="LYX-lR-LHR" customClass="MemoryCell" customModule="happydays" customModuleProvider="target">
                                 <rect key="frame" x="107" y="50" width="200" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="07A-tc-kOj">
@@ -86,9 +92,12 @@ asked to grant those permissions, but you can change your mind later in Settings
                                         <constraint firstItem="K3g-5M-SwU" firstAttribute="leading" secondItem="07A-tc-kOj" secondAttribute="leading" id="tp2-gy-qpa"/>
                                     </constraints>
                                 </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="imageView" destination="K3g-5M-SwU" id="g4X-E9-yPT"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="SC5-Ch-kgt">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="Header" id="SC5-Ch-kgt">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -100,6 +109,9 @@ asked to grant those permissions, but you can change your mind later in Settings
                                             <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <outlet property="delegate" destination="zut-xY-lPl" id="g78-fP-cPK"/>
+                                    </connections>
                                 </searchBar>
                             </subviews>
                             <constraints>
@@ -123,7 +135,7 @@ asked to grant those permissions, but you can change your mind later in Settings
         <!--Navigation Controller-->
         <scene sceneID="eke-iG-b9w">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zxm-ie-rZY" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="FirstRun" automaticallyAdjustsScrollViewInsets="NO" id="zxm-ie-rZY" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YDm-zU-eER">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

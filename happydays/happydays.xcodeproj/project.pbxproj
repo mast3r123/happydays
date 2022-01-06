@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF48A62827876BAD00303A91 /* MemoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF48A62727876BAD00303A91 /* MemoriesViewController.swift */; };
+		AF48A62A27876C3300303A91 /* MemoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF48A62927876C3300303A91 /* MemoryCell.swift */; };
 		AF807C582787512C00E91B9B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF807C572787512C00E91B9B /* AppDelegate.swift */; };
 		AF807C5A2787512C00E91B9B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF807C592787512C00E91B9B /* SceneDelegate.swift */; };
 		AF807C5C2787512C00E91B9B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF807C5B2787512C00E91B9B /* ViewController.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF48A62727876BAD00303A91 /* MemoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesViewController.swift; sourceTree = "<group>"; };
+		AF48A62927876C3300303A91 /* MemoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCell.swift; sourceTree = "<group>"; };
 		AF807C542787512C00E91B9B /* happydays.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = happydays.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF807C572787512C00E91B9B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AF807C592787512C00E91B9B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 				AF807C602787512D00E91B9B /* Assets.xcassets */,
 				AF807C622787512D00E91B9B /* LaunchScreen.storyboard */,
 				AF807C652787512D00E91B9B /* Info.plist */,
+				AF48A62727876BAD00303A91 /* MemoriesViewController.swift */,
+				AF48A62927876C3300303A91 /* MemoryCell.swift */,
 			);
 			path = happydays;
 			sourceTree = "<group>";
@@ -141,6 +147,8 @@
 				AF807C5C2787512C00E91B9B /* ViewController.swift in Sources */,
 				AF807C582787512C00E91B9B /* AppDelegate.swift in Sources */,
 				AF807C5A2787512C00E91B9B /* SceneDelegate.swift in Sources */,
+				AF48A62827876BAD00303A91 /* MemoriesViewController.swift in Sources */,
+				AF48A62A27876C3300303A91 /* MemoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
