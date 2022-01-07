@@ -181,6 +181,28 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     }
     
     func transcribeAudio(memory: URL) {
+        let audio = audioURL(for: memory)
+        let transcription = transcriptURL(for: memory)
+        
+        let recognizer = SFSpeechRecognizer()
+        let request = SFSpeechURLRecognitionRequest(url: audio)
+        
+        recognizer?.recognitionTask(with: request) { [unowned self] (result, error) in
+            guard let result = result else {
+                return
+            }
+            
+            if result.isFinal {
+                let text = result.bestTranscription.formattedString
+                
+                do {
+                    try text.write(to: transcription, atomically: true, encoding: .utf8)
+                } catch {
+                    
+                }
+            }
+
+        }
         
     }
 }
