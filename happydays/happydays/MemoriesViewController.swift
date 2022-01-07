@@ -125,3 +125,40 @@ extension MemoriesViewController: UIImagePickerControllerDelegate, UINavigationC
         }
     }
 }
+
+extension MemoriesViewController {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 { return 0 } else { return memories.count }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Memory", for: indexPath) as? MemoryCell else { return UICollectionViewCell() }
+        let memory = memories[indexPath.row]
+        let imageName = thumbnailURL(for: memory).path
+        let image = UIImage(contentsOfFile: imageName)
+        cell.imageView.image = image
+        return cell
+    }
+}
+
+extension MemoriesViewController {
+    func imageURL(for memory: URL) -> URL {
+        return memory.appendingPathExtension("jpeg")
+    }
+    
+    func thumbnailURL(for memory: URL) -> URL {
+        return memory.appendingPathExtension("thumb")
+    }
+    
+    func audioURL(for memory: URL) -> URL {
+        return memory.appendingPathExtension("m4a")
+    }
+    
+    func transcriptURL(for memory: URL) -> URL {
+        return memory.appendingPathExtension("txt")
+    }
+}
