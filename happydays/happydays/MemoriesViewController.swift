@@ -10,7 +10,7 @@ import AVFoundation
 import Photos
 import Speech
 
-class MemoriesViewController: UICollectionViewController {
+class MemoriesViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var memories = [URL]()
     
@@ -142,6 +142,15 @@ extension MemoriesViewController {
         let image = UIImage(contentsOfFile: imageName)
         cell.imageView.image = image
         return cell
+    }
+    
+    //Search bar supplementry view
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if (section == 1)  { return CGSize.zero } else { return CGSize(width: 0, height: 50) }
     }
 }
 
