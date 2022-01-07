@@ -69,7 +69,7 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     func saveNewMemory(image: UIImage) {
         //create memory name
         let memoryName = "memory-\(Date().timeIntervalSince1970)"
-        let imageName = memoryName + ".jpeg"
+        let imageName = memoryName + ".jpg"
         let thumbName = memoryName + ".thumb"
         
         do {
@@ -248,7 +248,7 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
         var allItems = [CSSearchableItem]()
         searchQuery?.cancel()
         
-        let queryString = "contentDesciprtion == \"*\(text)*\"c"
+        let queryString = "contentDescription == \"*\(text)*\"c"
         searchQuery = CSSearchQuery(queryString: queryString, attributes: nil)
         
         searchQuery?.foundItemsHandler = { items in
@@ -260,6 +260,7 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
                 activateFilter(matches: allItems)
             }
         }
+        searchQuery?.start()
     }
     
     func activateFilter(matches: [CSSearchableItem]) {
@@ -365,7 +366,7 @@ extension MemoriesViewController: UISearchBarDelegate {
 
 extension MemoriesViewController {
     func imageURL(for memory: URL) -> URL {
-        return memory.appendingPathExtension("jpeg")
+        return memory.appendingPathExtension("jpg")
     }
     
     func thumbnailURL(for memory: URL) -> URL {
