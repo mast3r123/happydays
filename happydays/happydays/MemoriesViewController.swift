@@ -27,13 +27,15 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        checkPermissions()
-        loadMemories()
-        
-        recordingUrl = getDocumentsDirectory().appendingPathExtension("recording.m4a")
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        recordingUrl = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        loadMemories()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkPermissions()
     }
     
     @objc func addTapped() {
@@ -142,8 +144,6 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     }
     
     func recordMemory() {
-        audioPlayer?.stop()
-        
         collectionView.backgroundColor = UIColor(red: 0.5, green: 0, blue: 0, alpha: 1)
         
         let recordingSession = AVAudioSession.sharedInstance()
@@ -168,25 +168,24 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     }
     
     func finishRecording(success: Bool) {
-        collectionView.backgroundColor = UIColor.darkGray
-        
-        audioRecorder.stop()
+        collectionView?.backgroundColor = UIColor.darkGray
+        audioRecorder?.stop()
+
         if success {
-            
             do {
-                let audioMemoryURL = activeMemory.appendingPathExtension("m4a")
+                let memoryAudioURL = activeMemory.appendingPathExtension("m4a")
                 let fm = FileManager.default
-                
-                if fm.fileExists(atPath: audioMemoryURL.path) {
-                    try fm.removeItem(atPath: audioMemoryURL.path)
+
+                if fm.fileExists(atPath: memoryAudioURL.path) {
+                    try fm.removeItem(at: memoryAudioURL)
                 }
-                
-                try fm.moveItem(at: recordingUrl, to: audioMemoryURL)
+
+                try fm.moveItem(at: recordingUrl, to: memoryAudioURL)
+
                 transcribeAudio(memory: activeMemory)
-            } catch {
-                
+            } catch let error {
+                print("Failure finishing recording: \(error)")
             }
-            
         }
     }
     
@@ -209,7 +208,7 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
                     try text.write(to: transcription, atomically: true, encoding: .utf8)
                     self.indexMemory(memory: memory, text: text)
                 } catch {
-                    
+                    print(error.localizedDescription)
                 }
             }
 
@@ -341,7 +340,7 @@ extension MemoriesViewController {
                 print(contents)
             }
         } catch {
-            
+            print(error.localizedDescription)
         }
     }
 }
