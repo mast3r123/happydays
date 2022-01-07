@@ -18,6 +18,8 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     var audioRecorder: AVAudioRecorder!
     var recordingUrl: URL!
     
+    var audioPlayer: AVAudioPlayer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -134,6 +136,8 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
     }
     
     func recordMemory() {
+        audioPlayer?.stop()
+        
         collectionView.backgroundColor = UIColor(red: 0.5, green: 0, blue: 0, alpha: 1)
         
         let recordingSession = AVAudioSession.sharedInstance()
@@ -255,6 +259,28 @@ extension MemoriesViewController {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if (section == 1)  { return CGSize.zero } else { return CGSize(width: 0, height: 50) }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let memory = memories[indexPath.row]
+        let fm = FileManager.default
+        
+        do {
+            let audioName = audioURL(for: memory)
+            let transcriptionName = transcriptURL(for: memory)
+            
+            if fm.fileExists(atPath: audioName.path) {
+                audioPlayer = try AVAudioPlayer(contentsOf: audioName)
+                audioPlayer?.play()
+            }
+            
+            if fm.fileExists(atPath: transcriptionName.path) {
+                let contents = try String(contentsOf: transcriptionName)
+                print(contents)
+            }
+        } catch {
+            
+        }
     }
 }
 
