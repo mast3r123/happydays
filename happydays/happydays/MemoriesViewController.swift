@@ -13,12 +13,18 @@ import Speech
 class MemoriesViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var memories = [URL]()
+    var activeMemory: URL!
+    
+    var audioRecorder: AVAudioRecorder!
+    var recordingUrl: URL!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         checkPermissions()
         loadMemories()
+        
+        recordingUrl = getDocumentsDirectory().appendingPathExtension("recording.m4a")
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
     }
@@ -113,6 +119,70 @@ class MemoriesViewController: UICollectionViewController, UICollectionViewDelega
             }
         }
     }
+    
+    @objc func memoryLongPress(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let cell = sender.view as! MemoryCell
+            
+            if let index = collectionView.indexPath(for: cell) {
+                activeMemory = memories[index.row]
+                recordMemory()
+            }
+        } else if sender.state == .ended {
+            finishRecording(success: true)
+        }
+    }
+    
+    func recordMemory() {
+        collectionView.backgroundColor = UIColor(red: 0.5, green: 0, blue: 0, alpha: 1)
+        
+        let recordingSession = AVAudioSession.sharedInstance()
+        do {
+            try recordingSession.setCategory(.playAndRecord, mode: .default, options: .defaultToSpeaker)
+            try recordingSession.setActive(true)
+            
+            let settings = [
+                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                AVSampleRateKey: 44100,
+                AVNumberOfChannelsKey: 2,
+                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            ]
+            
+            audioRecorder = try? AVAudioRecorder(url: recordingUrl, settings: settings)
+            audioRecorder.delegate = self
+            audioRecorder.record()
+            
+        } catch {
+            finishRecording(success: false)
+        }
+    }
+    
+    func finishRecording(success: Bool) {
+        collectionView.backgroundColor = UIColor.darkGray
+        
+        audioRecorder.stop()
+        if success {
+            
+            do {
+                let audioMemoryURL = activeMemory.appendingPathExtension("m4a")
+                let fm = FileManager.default
+                
+                if fm.fileExists(atPath: audioMemoryURL.path) {
+                    try fm.removeItem(atPath: audioMemoryURL.path)
+                }
+                
+                try fm.moveItem(at: recordingUrl, to: audioMemoryURL)
+                transcribeAudio(memory: activeMemory)
+            } catch {
+                
+            }
+            
+        }
+    }
+    
+    func transcribeAudio(memory: URL) {
+        
+    }
 }
 
 extension MemoriesViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -136,11 +206,23 @@ extension MemoriesViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Memory", for: indexPath) as? MemoryCell else { return UICollectionViewCell() }
         let memory = memories[indexPath.row]
         let imageName = thumbnailURL(for: memory).path
         let image = UIImage(contentsOfFile: imageName)
         cell.imageView.image = image
+        
+        if cell.gestureRecognizers == nil {
+            let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(memoryLongPress))
+            recognizer.minimumPressDuration = 0.25
+            cell.addGestureRecognizer(recognizer)
+            
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.layer.borderWidth = 3
+            cell.layer.cornerRadius = 10
+        }
+        
         return cell
     }
     
@@ -151,6 +233,14 @@ extension MemoriesViewController {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if (section == 1)  { return CGSize.zero } else { return CGSize(width: 0, height: 50) }
+    }
+}
+
+extension MemoriesViewController: AVAudioRecorderDelegate {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        if !flag {
+            finishRecording(success: false)
+        }
     }
 }
 
